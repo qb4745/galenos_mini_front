@@ -1,0 +1,99 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+{% block head_title %}Fundación Apoyo - Administrador{% endblock head_title %}
+
+
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="medico_id">Medico ID:</label>
+              <input
+                id="medico_id"
+                type="text"
+                name="medico_id"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="monto">Monto:</label>
+              <input id="monto" type="text" name="monto" maxlength="100" required />
+            </p>
+            <p>
+              <label for="tipo_pago">Tipo de pago:</label>
+              <input
+                id="tipo_pago"
+                type="text"
+                name="tipo_pago"
+                maxlength="100"
+                required
+              />
+            </p>
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Crear Pago</button>
+          </form>
+
+
+
+    </div>
+
+
+        <!-- Blank Start -->
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Lista de Pagos</h6>
+                <div class="table-responsive">
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Pago</th>
+                                <th scope="col">ID Médico</th>
+                                <th scope="col">Monto</th>
+                                <th scope="col">Tipo de Pago</th>
+                                <th scope="col">Fecha</th>
+                            </tr>
+                        </thead>
+                        {% for obj in response %}
+                        <tbody>
+                            <tr>
+                                <td><a href="{% url 'web:pago-detail' obj.id %}">{{ obj.id }}</td>
+                                <td><a href="{% url 'web:pago-detail' obj.id %}">{{ obj.medico_id }}</td>
+                                <td><a href="{% url 'web:pago-detail' obj.id %}">{{ obj.monto }}</td>
+                                <td><a href="{% url 'web:pago-detail' obj.id %}">{{ obj.tipo_pago }}</td>
+                                <td><a href="{% url 'web:pago-detail' obj.id %}">{{ obj.fecha_pago }}</td>
+                                <td><h6><a href="{% url 'web:pago-update' obj.id %}" class="btn btn-sm btn-warning mt-auto">Editar</a></h6></td>
+                                <td><h6><a href="{% url 'web:pago-delete' pk=obj.id %}" class="btn btn-sm btn-danger mt-auto" onclick="return confirm('¿Estás seguro de eliminar el pago?')">Eliminar</a></h6></td>
+
+                            </tr>
+
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

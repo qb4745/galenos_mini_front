@@ -1,0 +1,65 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+{% block head_title %}Fundación Apoyo - Administrador{% endblock head_title %}
+
+
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+
+
+
+        <!-- Blank Start -->
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Detalle de Pago</h6>
+                <div class="table-responsive">
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th scope="col">ID Pago</th>
+                                <th scope="col">ID Médico</th>
+                                <th scope="col">Monto</th>
+                                <th scope="col">Tipo de Pago</th>
+                                <th scope="col">Fecha</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+
+                                <td>{{ obj.id }}</td>
+                                <td>{{ obj.medico_id }}</td>
+                                <td>{{ obj.monto }}</td>
+                                <td>{{ obj.tipo_pago }}</td>
+                                <td>{{ obj.fecha }}</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}
