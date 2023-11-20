@@ -1,0 +1,90 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario-rol' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="name">Nombre de Rol:</label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                maxlength="100"
+                required
+              />
+            </p>
+
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Crear Rol</button>
+          </form>
+
+
+
+    </div>
+
+
+      <!-- Blank Start -->
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Lista de Roles</h6>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Rol</th>
+                            <th scope="col">Nombre de Rol</th>
+                        </tr>
+                    </thead>
+                    {% for obj in response %}
+                    <tbody>
+                        <tr>
+                          {% with url_parts=obj.url|split:"/" %}
+                              {% if url_parts|length >= 2 %}
+                                  <td><a href="{% url 'web:rol-detail' url_parts|second_last %}">{{ url_parts|second_last }}</a></td>
+                              {% endif %}
+                          {% endwith %}
+
+                            <td>{{ obj.name }}</td>
+                          {% with url_parts=obj.url|split:"/" %}
+                            {% if url_parts|length >= 2 %}
+                                <td><a href="{% url 'web:rol-update' url_parts|second_last %}" class="btn btn-sm btn-warning mt-auto">Editar</a></h6></td>
+                            {% endif %}
+                         {% endwith %}
+
+                         {% with url_parts=obj.url|split:"/" %}
+                            {% if url_parts|length >= 2 %}
+                            <td><h6><a href="{% url 'web:rol-delete' url_parts|second_last %}" class="btn btn-sm btn-danger mt-auto" onclick="return confirm('¿Estás seguro de eliminar el rol?')">Eliminar</a></h6></td>
+                            {% endif %}
+                        {% endwith %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+      </div>
+      <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

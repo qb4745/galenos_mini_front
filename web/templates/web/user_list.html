@@ -1,0 +1,106 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario-user' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="username">Nombre de Usuario:</label>
+              <input
+                id="username"
+                type="text"
+                name="username"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="email">Email:</label>
+              <input id="email" type="text" name="email" required />
+            </p>
+            <p>
+              <label for="password">Password:</label>
+              <input
+                id="password"
+                type="text"
+                name="password"
+                required
+              />
+            </p>
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Crear Usuario</button>
+          </form>
+
+
+
+    </div>
+
+
+      <!-- Blank Start -->
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Lista de Pagos</h6>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Usuario</th>
+                            <th scope="col">Nombre de Usuario</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Password</th>
+                        </tr>
+                    </thead>
+                    {% for obj in response %}
+                    <tbody>
+                        <tr>
+                          {% with url_parts=obj.url|split:"/" %}
+                              {% if url_parts|length >= 2 %}
+                                  <td><a href="{% url 'web:user-detail' url_parts|second_last %}">{{ url_parts|second_last }}</a></td>
+                              {% endif %}
+                          {% endwith %}
+
+                            <td>{{ obj.username }}</td>
+                            <td>{{ obj.email }}</td>
+                            <td>{{ obj.password }}</td>
+                          {% with url_parts=obj.url|split:"/" %}
+                              {% if url_parts|length >= 2 %}
+                                  <td><a href="{% url 'web:user-update' url_parts|second_last %}" class="btn btn-sm btn-warning mt-auto">Editar</a></h6></td>
+                              {% endif %}
+                          {% endwith %}
+
+                          {% with url_parts=obj.url|split:"/" %}
+                              {% if url_parts|length >= 2 %}
+                              <td><h6><a href="{% url 'web:user-delete' url_parts|second_last %}" class="btn btn-sm btn-danger mt-auto" onclick="return confirm('¿Estás seguro de eliminar el usuario?')">Eliminar</a></h6></td>
+                              {% endif %}
+                          {% endwith %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+      </div>
+      <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

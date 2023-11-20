@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import PagoForm
+from .forms import PagoForm, UserForm, RolForm
 from django.http import HttpResponseServerError
 import requests
 import json
+from django.http import HttpResponseBadRequest
 from django.views.generic import (
     TemplateView,
     CreateView,
@@ -11,6 +12,10 @@ from django.views.generic import (
     ListView,
     DetailView,
 )
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -21,6 +26,14 @@ class DashBoardView(TemplateView):
 
 class UpdatedView(TemplateView):
     template_name = "web/updated.html"
+
+
+class UserUpdatedView(TemplateView):
+    template_name = "web/user_updated.html"
+
+
+class RolUpdatedView(TemplateView):
+    template_name = "web/rol_updated.html"
 
 
 def pago_list(request):
@@ -50,48 +63,38 @@ def pago_detail(request, pk):
     api_url = f"http://54.147.37.217:8001/administracion/gestion-pagos/lista/{pk}"
     response = requests.get(api_url)
 
-    # Check if the API request was successful (status code 2xx)
     if response.status_code // 100 == 2:
         pago_from_api = response.json()
         print(f"pago from api: {pago_from_api}")
 
         return render(request, "web/pago_detail.html", {"obj": pago_from_api})
     else:
-        # Handle the case where the API request was not successful
-        # You might want to raise an exception, log an error, or handle it accordingly
         return HttpResponseServerError("API request failed")
 
 
 def pago_update(request, pk):
-    # Make a request to the API to get details for the specific Pago
     api_url = f"http://54.147.37.217:8001/administracion/gestion-pagos/lista/{pk}"
     response = requests.get(api_url)
 
-    # Check if the API request was successful (status code 2xx)
     if response.status_code // 100 == 2:
         pago_from_api = response.json()
         print(f"pago from api: {pago_from_api}")
 
-        # You can create a form with initial data from the API response
         form = PagoForm(initial=pago_from_api)
 
         if request.method == "POST":
-            # If it's a POST request, update the data
             form = PagoForm(request.POST)
             if form.is_valid():
-                # Extract the updated data from the form
                 updated_data = {
                     "medico_id": form.cleaned_data["medico_id"],
                     "monto": form.cleaned_data["monto"],
                     "tipo_pago": form.cleaned_data["tipo_pago"],
                 }
 
-                # Define the headers for the API request
                 headers = {
                     "Content-type": "application/json",
                 }
 
-                # Make a request to the API to update the data
                 update_url = f"http://54.147.37.217:8001/administracion/gestion-pagos/modifica/{pk}"
                 update_response = requests.put(
                     update_url, data=json.dumps(updated_data), headers=headers
@@ -99,33 +102,222 @@ def pago_update(request, pk):
 
                 # Check if the update was successful
             if update_response.status_code // 100 == 2:
-                return redirect(
-                    "web:updated"
-                )  # Use the correct name of the URL pattern
+                return redirect("web:updated")
             else:
                 return HttpResponseServerError("API update request failed")
 
-        # If it's a GET request or the form is not valid, render the update form
         return render(
             request, "web/pago_update.html", {"form": form, "obj": pago_from_api}
         )
     else:
-        # Handle the case where the API request was not successful
-        # You might want to raise an exception, log an error, or handle it accordingly
         return HttpResponseServerError("API request failed")
 
 
 def pago_delete(request, pk):
-    # Make a request to the API to delete the specific Pago
     delete_url = f"http://54.147.37.217:8001/administracion/gestion-pagos/elimina/{pk}"
     delete_response = requests.delete(delete_url)
 
-    # Check if the delete request was successful (status code 2xx)
     if delete_response.status_code // 100 == 2:
-        return redirect(
-            "web:pago-list"
-        )  # Redirect to the list view after successful deletion
+        return redirect("web:pago-list")
     else:
-        # Handle the case where the API request was not successful
-        # You might want to raise an exception, log an error, or handle it accordingly
+        return HttpResponseServerError("API delete request failed")
+
+
+def user_list(request):
+    response = requests.get(
+        "http://54.147.37.217:8000/administracion/usuarios/gestion/lista/"
+    ).json()
+    return render(request, "web/user_list.html", {"response": response})
+
+
+def post_user(request):
+    url = "http://54.147.37.217:8000/administracion/usuarios/gestion/crea/"
+    form = UserForm(request.POST or None)
+
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        data = {"username": username, "email": email, "password": password}
+        headers = {"Content-type": "application/json"}
+
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        print(f"respuesta status: {response.status_code}")
+        if response.status_code // 100 == 2:
+            # Successful API request, render the template with the response
+            return render(request, "web/form.html", {"response": response})
+        else:
+            # API request was not successful, handle the error accordingly
+            return HttpResponseServerError("API request failed")
+    else:
+        # Form is not valid, handle the error or return an appropriate response
+        return HttpResponseBadRequest("Invalid form data")
+
+
+def user_detail(request, pk):
+    # Make a request to the API to get details for the specific Pago
+    api_url = f"http://54.147.37.217:8000/administracion/usuarios/gestion/lista/{pk}"
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        user_from_api = response.json()
+        print(f"user from api: {user_from_api}")
+
+        return render(request, "web/user_detail.html", {"obj": user_from_api})
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def user_update(request, pk):
+    api_url = f"http://54.147.37.217:8000/administracion/usuarios/gestion/lista/{pk}/"
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        user_from_api = response.json()
+        print(f"pago from api: {user_from_api}")
+
+        form = UserForm(initial=user_from_api)
+
+        if request.method == "POST":
+            form = UserForm(request.POST)
+            if form.is_valid():
+                updated_data = {
+                    "username": form.cleaned_data["username"],
+                    "email": form.cleaned_data["email"],
+                    "password": form.cleaned_data["password"],
+                }
+
+                headers = {
+                    "Content-type": "application/json",
+                }
+
+                update_url = f"http://54.147.37.217:8000/administracion/usuarios/gestion/modifica/{pk}/"
+                print(f"1 update url : {update_url}")
+                print(f"2 updated data : {json.dumps(updated_data)}")
+                print(f"3 headers : {headers}")
+                update_response = requests.put(
+                    update_url, data=json.dumps(updated_data), headers=headers
+                )
+
+                # Check if the update was successful
+                print(f"4 update response : {update_response}")
+                if update_response.status_code // 100 == 2:
+                    return redirect("web:user-updated")
+
+                else:
+                    return HttpResponseServerError("API update request failed")
+        return render(
+            request, "web/user_update.html", {"form": form, "obj": user_from_api}
+        )
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def user_delete(request, pk):
+    delete_url = (
+        f"http://54.147.37.217:8000/administracion/usuarios/gestion/elimina/{pk}"
+    )
+    delete_response = requests.delete(delete_url)
+
+    if delete_response.status_code // 100 == 2:
+        return redirect("web:user-list")
+    else:
+        return HttpResponseServerError("API delete request failed")
+
+
+def rol_list(request):
+    response = requests.get(
+        "http://54.147.37.217:8000/administracion/usuarios/gestion/roles/lista/"
+    ).json()
+    return render(request, "web/rol_list.html", {"response": response})
+
+
+def post_rol(request):
+    url = "http://54.147.37.217:8000/administracion/usuarios/gestion/roles/"
+    form = RolForm(request.POST or None)
+
+    if form.is_valid():
+        name = form.cleaned_data.get("name")
+        data = {"name": name}
+        headers = {"Content-type": "application/json"}
+
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        print(f"respuesta status: {response.status_code}")
+        if response.status_code // 100 == 2:
+            # Successful API request, render the template with the response
+            return render(request, "web/form_rol.html", {"response": response})
+        else:
+            # API request was not successful, handle the error accordingly
+            return HttpResponseServerError("API request failed")
+    else:
+        # Form is not valid, handle the error or return an appropriate response
+        return HttpResponseBadRequest("Invalid form data")
+
+
+def rol_detail(request, pk):
+    # Make a request to the API to get details for the specific Pago
+    api_url = (
+        f"http://54.147.37.217:8000/administracion/usuarios/gestion/roles/lista/{pk}"
+    )
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        rol_from_api = response.json()
+        print(f"user from api: {rol_from_api}")
+
+        return render(request, "web/rol_detail.html", {"obj": rol_from_api})
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def rol_update(request, pk):
+    api_url = (
+        f"http://54.147.37.217:8000/administracion/usuarios/gestion/roles/lista/{pk}/"
+    )
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        rol_from_api = response.json()
+        print(f"rol from api: {rol_from_api}")
+
+        form = RolForm(initial=rol_from_api)
+
+        if request.method == "POST":
+            form = RolForm(request.POST)
+            if form.is_valid():
+                updated_data = {
+                    "name": form.cleaned_data["name"],
+                }
+
+                headers = {
+                    "Content-type": "application/json",
+                }
+
+                update_url = f"http://54.147.37.217:8000/administracion/usuarios/gestion/roles/modifica/{pk}/"
+                update_response = requests.put(
+                    update_url, data=json.dumps(updated_data), headers=headers
+                )
+
+                # Check if the update was successful
+            if update_response.status_code // 100 == 2:
+                return redirect("web:rol-updated")
+            else:
+                return HttpResponseServerError("API update request failed")
+
+        return render(
+            request, "web/rol_update.html", {"form": form, "obj": rol_from_api}
+        )
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def rol_delete(request, pk):
+    delete_url = (
+        f"http://54.147.37.217:8000/administracion/usuarios/gestion/roles/elimina/{pk}/"
+    )
+    delete_response = requests.delete(delete_url)
+
+    if delete_response.status_code // 100 == 2:
+        return redirect("web:rol-list")
+    else:
         return HttpResponseServerError("API delete request failed")

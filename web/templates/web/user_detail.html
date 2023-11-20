@@ -1,7 +1,6 @@
 {% extends "web/base.html" %}
 {% load static %}
 
-{% block head_title %}Fundación Apoyo - Administrador{% endblock head_title %}
 
 
 {% block content %}
@@ -20,28 +19,24 @@
         <!-- Blank Start -->
         <div class="col-12">
             <div class="bg-light rounded h-100 p-4">
-                <h6 class="mb-4">Detalle de Pago</h6>
+                <h6 class="mb-4">Detalle de Usuario</h6>
                 <div class="table-responsive">
                     <table class="table">
 
                         <thead>
                             <tr>
-                                <th scope="col">ID Pago</th>
-                                <th scope="col">ID Médico</th>
-                                <th scope="col">Monto</th>
-                                <th scope="col">Tipo de Pago</th>
-                                <th scope="col">Fecha</th>
+                                <th scope="col">Nombre de Usuario</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Password</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr>
 
-                                <td>{{ obj.id }}</td>
-                                <td>{{ obj.medico_id }}</td>
-                                <td>{{ obj.monto }}</td>
-                                <td>{{ obj.tipo_pago }}</td>
-                                <td>{{ obj.fecha_pago }}</td>
+                                <td>{{ obj.username }}</td>
+                                <td>{{ obj.email }}</td>
+                                <td>{{ obj.password }}</td>
 
                             </tr>
 
