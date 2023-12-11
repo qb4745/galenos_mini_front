@@ -28,3 +28,11 @@ class PacienteForm(forms.Form):
     direccion = forms.CharField(max_length=200)
     comuna = forms.CharField(max_length=100)
     fecha_nacimiento = forms.DateField()
+
+
+class ReservaForm(forms.Form):
+    id_paciente = forms.IntegerField()
+    id_medico = forms.IntegerField()
+    fecha = forms.DateField()
+    hora_inicio = forms.TimeField()
+    hora_termino = forms.TimeField()

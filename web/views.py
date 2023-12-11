@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import date
-from .forms import PagoForm, UserForm, RolForm, PacienteForm
+from .forms import PagoForm, UserForm, RolForm, PacienteForm, ReservaForm
 from django.http import HttpResponseServerError, HttpResponseBadRequest
 import requests
 import json
@@ -38,6 +38,10 @@ class RolUpdatedView(TemplateView):
 
 class PacienteUpdatedView(TemplateView):
     template_name = "web/paciente_updated.html"
+
+
+class ReservaUpdatedView(TemplateView):
+    template_name = "web/reserva_updated.html"
 
 
 def pago_list(request):
@@ -468,5 +472,145 @@ def paciente_delete(request, pk):
 
     if delete_response.status_code // 100 == 2:
         return redirect("web:paciente-list")
+    else:
+        return HttpResponseServerError("API delete request failed")
+
+
+# reservas
+def reserva_list(request):
+    response = requests.get(
+        "http://3.234.53.156:8000/galenos/web/pacientes/reservas/lista"
+    ).json()
+    return render(request, "web/reserva_list.html", {"response": response})
+
+
+class ReservaCreateView(TemplateView):
+    template_name = "web/reserva_create.html"
+
+
+def post_reserva(request):
+    url = "http://3.234.53.156:8000/galenos/web/pacientes/reservas/crea"
+    form = ReservaForm(request.POST or None)
+
+    if form.is_valid():
+        id_paciente = form.cleaned_data.get("id_paciente")
+        id_medico = form.cleaned_data.get("id_medico")
+        fecha = form.cleaned_data.get("fecha")
+        hora_inicio = form.cleaned_data.get("hora_inicio")
+        hora_termino = form.cleaned_data.get("hora_termino")
+
+        # Convert date to string
+        fecha_str = fecha.strftime("%Y-%m-%d")
+
+        # Convert hora_inicio to string
+        hora_inicio_str = hora_inicio.strftime("%H:%M:%S")
+
+        # Convert hora_termino to string
+        hora_termino_str = hora_termino.strftime("%H:%M:%S")
+
+        data = {
+            "id_paciente": id_paciente,
+            "id_medico": id_medico,
+            "fecha": fecha_str,
+            "hora_inicio": hora_inicio_str,
+            "hora_termino": hora_termino_str,
+        }
+        headers = {"Content-type": "application/json"}
+        print(f"1 data : {data}")
+
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        print(f"respuesta status: {response.status_code}")
+
+        if response.status_code // 100 == 2:
+            # Successful API request, render the template with the response
+            return render(request, "web/form_reserva_post.html", {"response": response})
+        else:
+            # API request was not successful, handle the error accordingly
+            return HttpResponseServerError("API request failed")
+    else:
+        # Form is not valid, handle the error or return an appropriate response
+        return HttpResponseBadRequest("Invalid form data")
+
+
+def reserva_detail(request, pk):
+    api_url = f"http://3.234.53.156:8000/galenos/web/pacientes/reservas/lista/{pk}"
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        reserva_from_api = response.json()
+        print(f"reserva_from_api: {reserva_from_api}")
+
+        return render(request, "web/reserva_detail.html", {"obj": reserva_from_api})
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def reserva_update(request, pk):
+    api_url = f"http://3.234.53.156:8000/galenos/web/pacientes/reservas/lista/{pk}"
+    response = requests.get(api_url)
+
+    if response.status_code // 100 == 2:
+        reserva_from_api = response.json()
+        print(f"reserva_from_api: {reserva_from_api}")
+
+        form = ReservaForm(initial=reserva_from_api)
+
+        if request.method == "POST":
+            form = ReservaForm(request.POST)
+
+            if form.is_valid():
+                # Convert date to string
+                fecha_str = form.cleaned_data["fecha"].strftime("%Y-%m-%d")
+
+                # Convert hora_inicio to string
+                hora_inicio_str = form.cleaned_data["hora_inicio"].strftime("%H:%M:%S")
+
+                # Convert hora_termino to string
+                hora_termino_str = form.cleaned_data["hora_termino"].strftime(
+                    "%H:%M:%S"
+                )
+
+                updated_data = {
+                    "id_paciente": form.cleaned_data["id_paciente"],
+                    "id_medico": form.cleaned_data["id_medico"],
+                    "fecha": fecha_str,
+                    "hora_inicio": hora_inicio_str,
+                    "hora_termino": hora_termino_str,
+                }
+
+                headers = {
+                    "Content-type": "application/json",
+                }
+
+                update_url = f"http://3.234.53.156:8000/galenos/web/pacientes/reservas/modifica/{pk}"
+                print(f"1 update url : {update_url}")
+                print(f"2 updated data : {json.dumps(updated_data)}")
+                print(f"3 headers : {headers}")
+                update_response = requests.put(
+                    update_url, data=json.dumps(updated_data), headers=headers
+                )
+
+                # Check if the update was successful
+                print(f"4 update response : {update_response}")
+                if update_response.status_code // 100 == 2:
+                    return redirect("web:reserva-updated")
+
+                else:
+                    return HttpResponseServerError("API update request failed")
+        return render(
+            request,
+            "web/reserva_update.html",
+            {"form": form, "obj": reserva_from_api},
+        )
+    else:
+        return HttpResponseServerError("API request failed")
+
+
+def reserva_delete(request, pk):
+    delete_url = f"http://3.234.53.156:8000/galenos/web/pacientes/reservas/elimina/{pk}"
+    delete_response = requests.delete(delete_url)
+
+    if delete_response.status_code // 100 == 2:
+        return redirect("web:reserva-list")
     else:
         return HttpResponseServerError("API delete request failed")

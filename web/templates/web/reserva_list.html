@@ -1,0 +1,73 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+
+<div class="col-12">
+
+
+    <h4 class="mb-4">Puedes Crear una Reserva con el boton "Crear Reserva".</h4>
+    <a href="{% url 'web:reserva-create' %}" class="btn btn-outline-primary btn-rounded"><i class="fa-regular fa-calendar-check fa-lg"><strong>Crear Reserva</strong></i></a>
+
+
+      <!-- Blank Start -->
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Lista de Pacientes</h6>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Reserva</th>
+                            <th scope="col">ID Paciente</th>
+                            <th scope="col">ID Médico</th>
+                            <th scope="col">Fecha Reserva</th>
+                            <th scope="col">Hora Inicio</th>
+                            <th scope="col">Hora Termino</th>
+
+                        </tr>
+                    </thead>
+                    {% for obj in response %}
+                    <tbody>
+                        <tr>
+
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.id }}</td>
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.id_paciente }}</td>
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.id_medico }}</td>
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.fecha }}</td>
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.hora_inicio }}</td>
+                            <td><a href="{% url 'web:reserva-detail' obj.id %}">{{ obj.hora_termino }}</td>
+                            <td><h6><a href="{% url 'web:reserva-update' obj.id %}" class="btn btn-sm btn-warning mt-auto">Editar</a></h6></td>
+                            <td><h6><a href="{% url 'web:reserva-delete' pk=obj.id %}" class="btn btn-sm btn-danger mt-auto" onclick="return confirm('¿Estás seguro de eliminar la reserva?')">Eliminar</a></h6></td>
+
+
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+      </div>
+      <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

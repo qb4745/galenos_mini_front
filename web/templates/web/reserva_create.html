@@ -1,0 +1,95 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+{% comment %} class ReservaForm(forms.Form):
+    id_paciente = forms.IntegerField()
+    id_medico = forms.IntegerField()
+    fecha = forms.DateField()
+    hora_inicio = forms.TimeField()
+    hora_termino = forms.TimeField() {% endcomment %}
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario-reserva-post' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="id_paciente">ID Paciente:</label>
+              <input
+                id="id_paciente"
+                type="text"
+                name="id_paciente"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="id_medico">ID Medico:</label>
+              <input
+                id="id_medico"
+                type="text"
+                name="id_medico"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="fecha">Fecha:</label>
+              <input
+                id="fecha"
+                type="date"
+                name="fecha"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="hora_inicio">Hora Inicio:</label>
+              <input
+                id="hora_inicio"
+                type="time"
+                name="hora_inicio"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="hora_termino">Hora Termino:</label>
+              <input
+                id="hora_termino"
+                type="time"
+                name="hora_termino"
+                maxlength="100"
+                required
+              />
+            </p>
+
+
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Crear Reserva</button>
+          </form>
+
+
+
+    </div>
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

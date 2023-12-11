@@ -7,14 +7,14 @@
 
     <div class="col-12">
       <div class="bg-light rounded h-100 p-4">
-        <h2>Edita Paciente</h2>
+        <h2>Edita Reserva</h2>
         <form method="post">
           {% csrf_token %} {{ form.as_p }}
           <button type="submit" class="btn btn-sm btn-warning mt-auto">
             Editar
           </button>
         </form>
-        <a href="{% url 'web:paciente-list' %}">Cancel</a>
+        <a href="{% url 'web:reserva-list' %}">Cancel</a>
       </div>
       <hr />
     </div>

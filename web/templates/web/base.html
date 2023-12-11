@@ -100,24 +100,24 @@
                   <i class="fa-solid fa-house"></i>Home
               </a>
 
-              <div class="navbar-nav w-100">
                 <a href="{% url 'web:user-list' %}" class="nav-item nav-link {% if request.path == '/user/' %}active{% endif %}">
                   <i class="fa-solid fa-user"></i>Usuarios</a>
               </a>
 
-              <div class="navbar-nav w-100">
                 <a href="{% url 'web:rol-list' %}" class="nav-item nav-link {% if request.path == '/rol/' %}active{% endif %}">
                   <i class="fa-solid fa-lock-open"></i></i>Roles</a>
               </a>
 
-              <div class="navbar-nav w-100">
                 <a href="{% url 'web:pago-list' %}" class="nav-item nav-link {% if request.path == '/pago/' %}active{% endif %}">
                   <i class="fa-solid fa-receipt"></i>Pagos</a>
               </a>
 
-              <div class="navbar-nav w-100">
                 <a href="{% url 'web:paciente-list' %}" class="nav-item nav-link {% if request.path == '/paciente/' %}active{% endif %}">
                   <i class="fa-solid fa-hospital-user"></i></i>Pacientes</a>
+              </a>
+
+                <a href="{% url 'web:reserva-list' %}" class="nav-item nav-link {% if request.path == '/reserva/' %}active{% endif %}">
+                  <i class="fa-regular fa-calendar-check"></i></i></i>Reservas</a>
               </a>
 
 

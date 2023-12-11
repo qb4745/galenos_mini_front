@@ -6,6 +6,8 @@ from .views import (
     UserUpdatedView,
     RolUpdatedView,
     PacienteUpdatedView,
+    ReservaCreateView,
+    ReservaUpdatedView,
 )
 
 
@@ -37,4 +39,13 @@ urlpatterns = [
     path("paciente/update/<int:pk>/", views.paciente_update, name="paciente-update"),
     path("paciente_updated", PacienteUpdatedView.as_view(), name="paciente-updated"),
     path("paciente/delete/<int:pk>", views.paciente_delete, name="paciente-delete"),
+    path("reserva/", views.reserva_list, name="reserva-list"),
+    path("reserva/crear/", ReservaCreateView.as_view(), name="reserva-create"),
+    path("form_reserva_post", views.post_reserva, name="formulario-reserva-post"),
+    path("reserva/details/<int:pk>/", views.reserva_detail, name="reserva-detail"),
+    path("reserva/update/<int:pk>/", views.reserva_update, name="reserva-update"),
+    path("reserva_updated", ReservaUpdatedView.as_view(), name="reserva-updated"),
+    path(
+        "reserva_updated/delete/<int:pk>", views.reserva_delete, name="reserva-delete"
+    ),
 ]
