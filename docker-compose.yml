@@ -23,9 +23,6 @@ services:
       dockerfile: Dockerfile.galenos-mini-front
     volumes:
       - .:/galenos_mini_front
-    depends_on:
-      mysql_db:
-        condition: service_healthy
     networks:
       - app-tier
     command: sh -c "python /galenos_mini_front/galenos_mini_front/manage.py makemigrations && python /galenos_mini_front/galenos_mini_front/manage.py migrate"

@@ -1,0 +1,48 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario-correo-post' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="date">Fecha:</label>
+              <input
+                id="date"
+                type="date"
+                name="date"
+                maxlength="100"
+                required
+              />
+            </p>
+
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Enviar Correos</button>
+          </form>
+
+
+
+    </div>
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}

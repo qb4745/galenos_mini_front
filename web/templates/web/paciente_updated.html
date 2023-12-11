@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exito Actualizando</title>
+  </head>
+  <body>
+    <Formulario>Exito Actualizando</Formulario>
+    <div class="navbar-nav w-100">
+      <a href="{% url 'web:paciente-list' %}" class="nav-item nav-link {% if request.path == '/paciente/' %}active{% endif %}">
+        <i class="fa-solid fa-hospital-user"></i></i>Volver</a>
+    </a>
+  </div>
+  </body>
+</html>
