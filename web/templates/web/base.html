@@ -105,7 +105,7 @@
               </a>
 
                 <a href="{% url 'web:rol-list' %}" class="nav-item nav-link {% if request.path == '/rol/' %}active{% endif %}">
-                  <i class="fa-solid fa-lock-open"></i></i>Roles</a>
+                  <i class="fa-solid fa-lock-open"></i>Roles</a>
               </a>
 
                 <a href="{% url 'web:pago-list' %}" class="nav-item nav-link {% if request.path == '/pago/' %}active{% endif %}">
@@ -113,11 +113,15 @@
               </a>
 
                 <a href="{% url 'web:paciente-list' %}" class="nav-item nav-link {% if request.path == '/paciente/' %}active{% endif %}">
-                  <i class="fa-solid fa-hospital-user"></i></i>Pacientes</a>
+                  <i class="fa-solid fa-hospital-user"></i>Pacientes</a>
               </a>
 
                 <a href="{% url 'web:reserva-list' %}" class="nav-item nav-link {% if request.path == '/reserva/' %}active{% endif %}">
-                  <i class="fa-regular fa-calendar-check"></i></i></i>Reservas</a>
+                  <i class="fa-regular fa-calendar-check"></i>Reservas</a>
+              </a>
+
+                <a href="{% url 'web:correo-create' %}" class="nav-item nav-link {% if request.path == '/correo/crear/' %}active{% endif %}">
+                  <i class="fa-solid fa-envelope"></i>Correos</a>
               </a>
 
 

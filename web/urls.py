@@ -8,6 +8,7 @@ from .views import (
     PacienteUpdatedView,
     ReservaCreateView,
     ReservaUpdatedView,
+    CorreoCreateView,
 )
 
 
@@ -48,4 +49,6 @@ urlpatterns = [
     path(
         "reserva_updated/delete/<int:pk>", views.reserva_delete, name="reserva-delete"
     ),
+    path("correo/crear/", CorreoCreateView.as_view(), name="correo-create"),
+    path("form_correo_post", views.post_correo, name="formulario-correo-post"),
 ]

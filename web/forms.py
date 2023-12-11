@@ -36,3 +36,7 @@ class ReservaForm(forms.Form):
     fecha = forms.DateField()
     hora_inicio = forms.TimeField()
     hora_termino = forms.TimeField()
+
+
+class CorreoForm(forms.Form):
+    date = forms.DateField()

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from datetime import date
-from .forms import PagoForm, UserForm, RolForm, PacienteForm, ReservaForm
+from .forms import PagoForm, UserForm, RolForm, PacienteForm, ReservaForm, CorreoForm
 from django.http import HttpResponseServerError, HttpResponseBadRequest
 import requests
 import json
@@ -614,3 +614,35 @@ def reserva_delete(request, pk):
         return redirect("web:reserva-list")
     else:
         return HttpResponseServerError("API delete request failed")
+
+
+# correo
+class CorreoCreateView(TemplateView):
+    template_name = "web/correo_create.html"
+
+
+def post_correo(request):
+    url = "http://52.3.91.207:8000/galenos/web/correos/pacientes"
+    form = CorreoForm(request.POST or None)
+
+    if form.is_valid():
+        date = form.cleaned_data.get("date")
+
+        # Convert date to string
+        date_str = date.strftime("%Y-%m-%d")
+
+        headers = {"Content-type": "application/json"}
+        url = f"{url}?date={date_str}"
+        print(f"1 url : {url}")
+        response = requests.post(url, headers=headers)
+        print(f"respuesta status: {response.status_code}")
+
+        if response.status_code // 100 == 2:
+            # Successful API request, render the template with the response
+            return render(request, "web/form_correo_post.html", {"response": response})
+        else:
+            # API request was not successful, handle the error accordingly
+            return HttpResponseServerError("API request failed")
+    else:
+        # Form is not valid, handle the error or return an appropriate response
+        return HttpResponseBadRequest("Invalid form data")
