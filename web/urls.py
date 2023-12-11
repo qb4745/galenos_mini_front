@@ -1,6 +1,12 @@
 from django.urls import path
 from . import views
-from .views import DashBoardView, UpdatedView, UserUpdatedView, RolUpdatedView
+from .views import (
+    DashBoardView,
+    UpdatedView,
+    UserUpdatedView,
+    RolUpdatedView,
+    PacienteUpdatedView,
+)
 
 
 app_name = "web"
@@ -25,4 +31,10 @@ urlpatterns = [
     path("rol/update/<int:pk>/", views.rol_update, name="rol-update"),
     path("rol_updated", RolUpdatedView.as_view(), name="rol-updated"),
     path("rol/delete/<int:pk>", views.rol_delete, name="rol-delete"),
+    path("paciente/", views.paciente_list, name="paciente-list"),
+    path("form_paciente_post", views.post_paciente, name="formulario-paciente-post"),
+    path("paciente/details/<int:pk>/", views.paciente_detail, name="paciente-detail"),
+    path("paciente/update/<int:pk>/", views.paciente_update, name="paciente-update"),
+    path("paciente_updated", PacienteUpdatedView.as_view(), name="paciente-updated"),
+    path("paciente/delete/<int:pk>", views.paciente_delete, name="paciente-delete"),
 ]

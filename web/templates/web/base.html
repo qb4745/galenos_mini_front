@@ -115,6 +115,11 @@
                   <i class="fa-solid fa-receipt"></i>Pagos</a>
               </a>
 
+              <div class="navbar-nav w-100">
+                <a href="{% url 'web:paciente-list' %}" class="nav-item nav-link {% if request.path == '/paciente/' %}active{% endif %}">
+                  <i class="fa-solid fa-hospital-user"></i></i>Pacientes</a>
+              </a>
+
 
 
               </div>

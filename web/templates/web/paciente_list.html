@@ -1,0 +1,187 @@
+{% extends "web/base.html" %}
+{% load static %}
+
+
+{% load custom_filters %}
+{% block content %}
+
+
+
+
+<!-- Content Start -->
+<div class="content">
+
+<!-- Blank Start -->
+
+
+<div class="col-12">
+    <div class="bg-light rounded h-100 p-4">
+          <form action="{% url 'web:formulario-paciente-post' %}" method="post">
+            {% csrf_token %} {{ form.as_p }}
+            <p>
+              <label for="email">Correo Electrónico:</label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="password">Contraseña:</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                maxlength="100"
+                required
+              />
+            <p>
+              <label for="rut">Rut:</label>
+              <input
+                id="rut"
+                type="text"
+                name="rut"
+                maxlength="20"
+                required
+              />
+            </p>
+            <p>
+              <label for="nombres">Nombres:</label>
+              <input
+                id="nombres"
+                type="text"
+                name="nombres"
+                maxlength="255"
+                required
+              />
+            </p>
+            <p>
+              <label for="apellidos">Apellidos:</label>
+              <input
+                id="apellidos"
+                type="text"
+                name="apellidos"
+                maxlength="255"
+                required
+              />
+            </p>
+            <p>
+              <label for="prevision_type">Previsión:</label>
+              <input
+                id="prevision_type"
+                type="text"
+                name="prevision_type"
+                maxlength="50"
+                required
+              />
+            </p>
+            <p>
+              <label for="telefono">Teléfono:</label>
+              <input
+                id="telefono"
+                type="text"
+                name="telefono"
+                maxlength="15"
+                required
+              />
+            </p>
+            <p>
+              <label for="direccion">Dirección:</label>
+              <input
+                id="direccion"
+                type="text"
+                name="direccion"
+                maxlength="200"
+                required
+              />
+            </p>
+            <p>
+              <label for="comuna">Comuna:</label>
+              <input
+                id="comuna"
+                type="text"
+                name="comuna"
+                maxlength="100"
+                required
+              />
+            </p>
+            <p>
+              <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+              <input
+                id="fecha_nacimiento"
+                type="date"
+                name="fecha_nacimiento"
+                required
+              />
+            </p>
+
+            <button type="submit" class="btn btn-sm btn-success mt-auto">Crear Paciente</button>
+          </form>
+
+
+
+    </div>
+
+
+      <!-- Blank Start -->
+      <div class="col-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Lista de Pacientes</h6>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID Paciente</th>
+                            <th scope="col">Correo Electrónico</th>
+                            <th scope="col">Rut</th>
+                            <th scope="col">Nombres</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Previsión</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Comuna</th>
+                            <th scope="col">Fecha de Nacimiento</th>
+                            <th scope="col">Contraseña</th>
+
+                        </tr>
+                    </thead>
+                    {% for obj in response %}
+                    <tbody>
+                        <tr>
+
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.id }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.email }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.rut }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.nombres }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.apellidos }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.prevision_type }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.telefono }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.direccion }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.comuna }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.fecha_nacimiento }}</td>
+                            <td><a href="{% url 'web:paciente-detail' obj.id %}">{{ obj.password }}</td>
+                            <td><h6><a href="{% url 'web:paciente-update' obj.id %}" class="btn btn-sm btn-warning mt-auto">Editar</a></h6></td>
+                            <td><h6><a href="{% url 'web:paciente-delete' pk=obj.id %}" class="btn btn-sm btn-danger mt-auto" onclick="return confirm('¿Estás seguro de eliminar al paciente?')">Eliminar</a></h6></td>
+
+
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+      </div>
+      <!-- Blank End -->
+</div>
+<!-- Blank End -->
+
+        </div>
+        <!-- Content End -->
+
+
+    <!-- Volver arriba -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+{% endblock content %}
